@@ -913,6 +913,9 @@ input:invalid, textarea:invalid, select:invalid {
 .mt-6 {
   margin-top: 1.5rem;
 }
+.mr-0 {
+  margin-right: 0px;
+}
 .mt-1 {
   margin-top: 0.25rem;
 }
@@ -1300,6 +1303,9 @@ input:invalid, textarea:invalid, select:invalid {
 }
 .font-extrabold {
   font-weight: 800;
+}
+.font-bold {
+  font-weight: 700;
 }
 .leading-tight {
   line-height: 1.25;
