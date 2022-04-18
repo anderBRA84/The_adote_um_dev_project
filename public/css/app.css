@@ -5,7 +5,7 @@
  * You can see the styles here:
  * https://unpkg.com/tailwindcss/dist/base.css
  */
-/*! tailwindcss v3.0.23 | MIT License | https://tailwindcss.com
+/*! tailwindcss v3.0.24 | MIT License | https://tailwindcss.com
  */
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -1287,13 +1287,13 @@ input:invalid, textarea:invalid, select:invalid {
   font-size: 1rem;
   line-height: 1.5rem;
 }
-.text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-}
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
+}
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }
 .font-semibold {
   font-weight: 600;
@@ -1301,11 +1301,11 @@ input:invalid, textarea:invalid, select:invalid {
 .font-medium {
   font-weight: 500;
 }
-.font-extrabold {
-  font-weight: 800;
-}
 .font-bold {
   font-weight: 700;
+}
+.font-extrabold {
+  font-weight: 800;
 }
 .leading-tight {
   line-height: 1.25;
@@ -1330,6 +1330,10 @@ input:invalid, textarea:invalid, select:invalid {
 .text-gray-400 {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 .text-gray-600 {
   --tw-text-opacity: 1;
@@ -1366,10 +1370,6 @@ input:invalid, textarea:invalid, select:invalid {
 .text-red-600 {
   --tw-text-opacity: 1;
   color: rgb(220 38 38 / var(--tw-text-opacity));
-}
-.text-white {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 .text-indigo-700 {
   --tw-text-opacity: 1;
