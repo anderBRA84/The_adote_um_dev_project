@@ -1,14 +1,14 @@
 <div>
-    <div class=" absolute top-0 left-0 transform duration-1000 flex flex-col items-center justify-center min-h-screen w-full bg-gradient-to-r from-primary-100 to-secondary-100">
+    <div class="absolute top-0 left-0 flex flex-col items-center justify-center w-full min-h-screen duration-1000 transform bg-gradient-to-r from-primary-100 to-secondary-100">
 
-        <div class="flex flex-1 flex-col items-center justify-end ext-2xl px-10">
+        <div class="flex flex-col items-center justify-end flex-1 px-10 ext-2xl">
 
-                <div class="flex flex-row space-x-2 items-center justify-end text-2xl p-4 mb-24">
+                <div class="flex flex-row items-center justify-end p-4 mb-24 space-x-2 text-2xl">
                     <img class=""src="{{asset('assets/mstile-150x150.png')}}"alt="logo"/>
-                    <span class="text-white  font-bold"> ADOTE UM DEV</span>
+                    <span class="font-bold text-white"> ADOTE UM DEV</span>
                 </div>
 
-                <p class="text-center text-white text-xs">
+                <p class="text-xs text-center text-white">
                     Lorem ipsum dolor sit amet, consectetur
                     adipisicing elit. Illo optio similique
                     suscipit perferendis. Nihil velit deleniti
@@ -17,15 +17,15 @@
                     iste ipsum tempore atque rem.
                 </p>
 
-                <button wire:click="loginAsDev"
+                <button wire:click="loginWithGithub"
 
-                    class=" flex flex-row space-x-2 justify-center items-center bg-white p-4 text-grey-100 mt-6 w-full rounded-full font-bold transform duration-150 active:scale-95 ">
+                    class="flex flex-row items-center justify-center w-full p-4 mt-6 space-x-2 font-bold duration-150 transform bg-white rounded-full text-grey-100 active:scale-95">
                    <img src="{{asset('assets/GitHub-Mark-32px.png')}}" alt="logoBtn1">
                     <span>Entrar como Dev</span>
                 </button>
 
-                <button wire:click="loginAsRecruiter"
-                class="flex flex-row space-x-2 justify-center items-center bg-white p-4 text-grey-100 mt-4 w-full rounded-full mb-8 font-bold transform duration-150 active:scale-95 ">
+                <button wire:click="loginWithGoogle"
+                class="flex flex-row items-center justify-center w-full p-4 mt-4 mb-8 space-x-2 font-bold duration-150 transform bg-white rounded-full text-grey-100 active:scale-95 ">
                     <img src="{{asset('assets/Google__G__Logo.svg')}}" alt="logoBtn2">
                     <span> Entrar como Recrutador</span>
                 </button>

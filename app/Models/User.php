@@ -2,14 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
+
+
+
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property string $remember_token
+ * @property Carbon $email_verified_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read HasOne $profile
+ *
+ */
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -59,34 +77,39 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function interest()
+    public function interests(): HasMany
     {
-        return $this->hasOne(Interest::class);
+        return $this->hasMany(Interest::class);
     }
 
-    public function preference()
+    public function knowledge(): HasMany
     {
-        return $this->hasOne(Preference::class);
+        return $this->hasMany(Knowledge::class);
+    }
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
 
     }
 
-    public function sentActions()
+    public function sentActions(): HasMany
     {
         return $this->hasMany(Action::class,'from_user_id','id');
     }
 
-    public function receivedActions()
+    public function receivedActions(): HasMany
     {
         return $this->hasMany(Action::class,'to_user_id','id');
     }
 
 
-    public function sentMessages()
+    public function sentMessages(): HasMany
     {
         return $this->hasMany(Message::class,'from_user_id','id');
     }
 
-    public function receivedMessages()
+    public function receivedMessages(): HasMany
     {
         return $this->hasMany(Message::class,'to_user_id','id');
     }

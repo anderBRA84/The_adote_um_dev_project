@@ -1,0 +1,150 @@
+# For more information: https://laravel.com/docs/sail
+version: '3'
+services:
+    laravel.test:
+        build:
+            context: ./docker/8.0
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: sail-8.0/app
+        extra_hosts:
+          - 'host.docker.internal:host-gateway'
+        ports:
+            - '${APP_PORT:-80}:80'
+        environment:
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+        volumes:
+            - '.:/var/www/html'
+        networks:
+            - sail
+        depends_on:
+            - mysql
+            - redis
+            - meilisearch
+            - selenium
+    mysql:
+        image: 'mysql:8.0'
+        ports:
+            - '${FORWARD_DB_PORT:-3306}:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_DATABASE: '${DB_DATABASE}'
+            MYSQL_USER: '${DB_USERNAME}'
+            MYSQL_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        volumes:
+            - 'sailmysql:/var/lib/mysql'
+        networks:
+            - sail
+        healthcheck:
+          test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+          retries: 3
+          timeout: 5s
+    redis:
+        image: 'redis:alpine'
+        ports:
+            - '${FORWARD_REDIS_PORT:-6379}:6379'
+        volumes:
+            - 'sailredis:/data'
+        networks:
+            - sail
+        healthcheck:
+          test: ["CMD", "redis-cli", "ping"]
+          retries: 3
+          timeout: 5s
+    meilisearch:
+        image: 'getmeili/meilisearch:latest'
+        environment:
+            MEILI_MASTER_KEY: '${MEILI_MASTER_KEY:-masterKey}'
+            MEILI_HTTP_ADDR: '${MEILI_HTTP_ADDR:-localhost:7700}'
+            MEILI_ENV: '${MEILI_ENV:-development}'
+        ports:
+            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+        volumes:
+            - 'sailmeilisearch:/data.ms'
+        networks:
+            - sail
+        healthcheck:
+          test: ["CMD", "wget", "--no-verbose", "--spider",  "http://${MEILI_HTTP_ADDR:-localhost:7700}/health"]
+          retries: 3
+          timeout: 5s
+    mailhog:
+        image: 'mailhog/mailhog:latest'
+        ports:
+            - '${FORWARD_MAILHOG_PORT:-1025}:1025'
+            - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
+        networks:
+            - sail
+    selenium:
+       image: 'selenium/standalone-chrome'
+       volumes:
+            - '/dev/shm:/dev/shm'
+       networks:
+           - sail
+#    sonarscanner:
+#        image: sonarsource/sonar-scanner-cli
+#        profiles: ["scan"]
+#        networks:
+#            - sail
+#        depends_on:
+#            - sonarqube
+    sonarqube:
+        image: sonarqube:community
+        environment:
+            SONAR_JDBC_URL: jdbc:postgresql://sonarqubedb:5432/sonar
+            SONAR_JDBC_USERNAME: sonar
+            SONAR_JDBC_PASSWORD: sonar
+        volumes:
+            - sonarqube_data:/opt/sonarqube/data
+            - sonarqube_extensions:/opt/sonarqube/extensions
+            - sonarqube_logs:/opt/sonarqube/logs
+            - sonarqube_temp:/opt/sonarqube/temp
+        ulimits:
+            nproc: 131072
+            nofile:
+                soft: 8192
+                hard: 131072
+        ports:
+            - "${FORWARD_SONAR_PORT:-9000}:9000"
+        networks:
+            - sail
+        depends_on:
+            - sonarqubedb
+    sonarqubedb:
+        image: postgres:12
+        ports:
+            - "${FORWARD_SONAR_DB_PORT:-5432}:5432"
+        environment:
+            POSTGRES_USER: sonar
+            POSTGRES_PASSWORD: sonar
+        volumes:
+            - postgresql:/var/lib/postgresql
+            - postgresql_data:/var/lib/postgresql/data
+        networks:
+            - sail
+networks:
+    sail:
+      driver: bridge
+volumes:
+    sailmysql:
+        driver: local
+    sailredis:
+        driver: local
+    sailmeilisearch:
+        driver: local
+    sonarqube_data:
+        driver: local
+    sonarqube_extensions:
+        driver: local
+    sonarqube_logs:
+        driver: local
+    sonarqube_temp:
+        driver: local
+    postgresql:
+        driver: local
+    postgresql_data:
+        driver: local

@@ -17,4 +17,11 @@ class Profile extends Model
         'avatar',
         'data',
     ];
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+
+    }
 }
