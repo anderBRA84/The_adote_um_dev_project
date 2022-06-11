@@ -1,6 +1,9 @@
 <div x-data="startForm({
     categories: @entangle('categories'),
     payload: @entangle('payload'),
+    interests: @entangle('user.interests'),
+    knowledge: @entangle('user.knowledge'),
+    typeResource: @entangle('user.typeResource'),
 })">
 <template x-for="category in categories">
 <div class="shadow overflow-hidden rounded-md">
@@ -18,14 +21,16 @@
                             x-on:change = "changeSkill(category.name, $event)">
                         <option value="">Selecione</option>
                         <template x-for="skill in category.skills">
-                            <option :value = "skill.id" x-text = "skill.name"></option>
+                            <option :key ="skill.id" :value = "skill.id" x-text = "skill.name"></option>
                         </template>
                     </select>
 
                 <div class="space-y-1">
-                    <template x-if="payload && payload.hasOwnProperty(category.name)">{{-- payload.hasOwnProperty(category.name) --}}
-                        <template x-for="(skill, index) in payload[category.name]">
-                            <div :key="'skill-${index}'" x-show="skill.category_id === category.id" class=" flex flex-col p-y-4">
+
+                        <template x-for="(skill, index) in payload">
+                            <template x-if="skill.category_id === category.id">
+                            <div :key="'skill-${index}'" class=" flex flex-col p-y-4">
+
                                 <ul class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
                                     <li class="col-span-1 md:flex rounded-md shadow-sm">
                                         <div class="flex-shrink-0 flex items-center justify-center md:w-24 w-auto md:rounded-l-md md:rounded-tr-none rounded-t-md bg-pink-600 text-white text-sm font-medium rounded-l-md text-center" x-text="skill.name"></div>
@@ -44,7 +49,7 @@
                                                 </div>
 
                                                 <div class="flex-shrink-0 pr-2 flex flex-col items-center">
-                                                    <button x-on:click.prevent="removeSkill(category.name, index)" class="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-400 rounded-full bg-transparent hover:text ">
+                                                    <button x-on:click.prevent="removeSkill(index, skill.category_id)" class="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-400 rounded-full bg-transparent hover:text ">
                                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                             </svg>
@@ -54,8 +59,9 @@
                                     </li>
                                 </ul>
                             </div>
+                            </template>
                         </template>
-                    </template>
+
                 </div>
             </div>
         </div>

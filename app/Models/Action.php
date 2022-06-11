@@ -9,6 +9,14 @@ class Action extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+     'from_user_id',
+     'to_user_id',
+     'name',
+     'expiration_at'
+
+    ];
+
     public function fromUser()
     {
         return $this->belongsTo(User::class,'from_user_id','id');

@@ -68,7 +68,6 @@ class KnowledgeScreen extends Component
             }
         ])->get()->toArray();
     }
-
     public function render(): Factory|View|Application
     {
         return view('livewire.components.knowledge-screen');

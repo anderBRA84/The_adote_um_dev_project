@@ -39,14 +39,6 @@ class DevelopersScreen extends Component
         }
     }
 
-    public function mount(): void
-    {
-        $this->loggedUser = User::with('profile', 'interests', 'knowledge', 'sentActions')
-            ->find(Auth::user()->id);
-
-        $this->getDevelopers();
-    }
-
     public function getDevelopers(int $page = 1): void
     {
         $this->developers = User::select('id', 'name')
@@ -114,6 +106,14 @@ class DevelopersScreen extends Component
         $this->developers['data'] = $devs->toArray();
 
         $this->developers = Arr::only($this->developers, ['current_page', 'data', 'last_page', 'total']);
+    }
+
+    public function mount(): void
+    {
+        $this->loggedUser = User::with('profile', 'interests', 'knowledge', 'sentActions')
+            ->find(Auth::user()->id);
+
+        $this->getDevelopers();
     }
 
     public function render(): Factory|View

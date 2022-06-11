@@ -1,63 +1,79 @@
-export default(params) =>({
-  /*dispatch:  null,
-    wire:      null,
-    refs:      null,*/
-    categories: params.categories,
-    payload:    params.payload,
-
- /*   init(){
-        this.dispatch = $dispatch;
-        this.wire = $wire;
-        this.refs = $refs;
-    },*/
-
-    changeSkill(selectedCategory, event){
-        const category = this.categories.find((item) => item.name == selectedCategory);
-        const skill = category.skills.find(item => item.id === parseInt( event.target.value));
-        console.log(selectedCategory,skill);
-
-        if (!this.payload){
-            this.payload = {};
+//export default(params) =>({});
+document.addEventListener("alpine:init", () => {
+    Alpine.data("startForm", (params) => {
+        let dataEdit = []
+        console.log(params.typeResource.initialValue);
+        if( params.typeResource.initialValue === 'interests' ){
+            dataEdit = params.interests
+        }
+        if( params.typeResource.initialValue === 'knowledge' ){
+            dataEdit = params.knowledge
         }
 
-        if (this.payload.hasOwnProperty(selectedCategory)){
 
-            this.payload[selectedCategory].push({
-                ...skill,
-                level: 0
+        return {
+        categories: params.categories,
+        payload:    params.payload,
+        typeResource : params.typeResource,
+        dataEdit : dataEdit,
+        init(){
+            this.loadEdit()
+        },
+        loadEdit() {
+            if(this.dataEdit) {
+                for (let index = 0; index < this.dataEdit.length; ++index) {
+                    this.payload.push({
+                        category_id: this.dataEdit[index].skill.category_id,
+                        id: this.dataEdit[index].skill.id,
+                        level: this.dataEdit[index].level,
+                        name: this.dataEdit[index].skill.name
+                    })
+                }
+            }
+        },
+
+        changeSkill(selectedCategory, event, el){
+            const category = this.categories.find((item) => item.name == selectedCategory);
+            const skill = category.skills.find(item => item.id === parseInt( event.target.value));
+
+            console.log(category,skill);
+
+            this.payload.push({
+                category_id: skill.category_id,
+                id: skill.id,
+                level:0,
+                name:skill.name,
             });
-        } else{
-            this.payload[selectedCategory] = [{
-                ...skill,
-                level: 0
-            }];
-        }
 
-        const newSkills = category.skills.filter((item)=> item.id !== skill.id);
-        console.log(JSON.parse(JSON.stringify(newSkills)));
-        this.categories = this.categories.map((item) => {
-            if (item.name == selectedCategory){
-                item.skills = newSkills;
+            const newSkills = category.skills.filter((item)=> item.id !== skill.id);
 
-            }
-            return item;
-        });
-        setTimeout( () =>{
-            event.target.value = "";
-        }, 100);
+            this.categories = this.categories.map((item) => {
+                if (item.name == selectedCategory){
+                    item.skills = newSkills;
+
+                }
+                return item;
+            });
+
+            setTimeout( () =>{
+                event.target.value = "";
+            }, 100);
     },
-    removeSkill(payloadCategory, position){
-        console.log(payloadCategory, position);
-       const skill = this.payload[payloadCategory].splice(position, 1);
 
-        this.categories = this.categories.map((item) => {
-            if (item.name == payloadCategory){
-                item.skills.push(skill[0]);
+    removeSkill(position, category_id){
+        const skill = this.payload.splice(position, 1);
 
+        this.categories = this.categories.map((item) =>{
+            if(item.id === category_id){
+                item.skills.pusch(skill[0]);
             }
+
             return item;
         });
-    }
 
+    },
+        ...params,
 
+  };
+});
 });
