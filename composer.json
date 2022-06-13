@@ -7,6 +7,8 @@
     "require": {
         "php": "^8.0.2",
         "bugsnag/bugsnag-laravel": "^2.23",
+        "doctrine/dbal": "2.*",
+        "ejarnutowski/laravel-api-key": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel-frontend-presets/tall": "^4.2",
         "laravel/framework": "^9.7",
@@ -17,7 +19,9 @@
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4.5",
         "livewire/livewire": "^2.10",
-        "predis/predis": "^1.1"
+        "pestphp/pest-plugin-parallel": "^1.1",
+        "predis/predis": "^1.1",
+        "pusher/pusher-php-server": "^7.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -27,6 +31,8 @@
         "nunomaduro/collision": "^6.1",
         "pestphp/pest": "^1.21",
         "pestphp/pest-plugin-laravel": "^1.2",
+        "pestphp/pest-plugin-livewire": "^1.2",
+        "pestphp/pest-plugin-mock": "^1.2",
         "phpunit/phpunit": "^9.5.10",
         "spatie/laravel-ignition": "^1.0"
     },
@@ -35,7 +41,11 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files":[
+            "app/Helpers/custom-helpers.php"
+        ]
+
     },
     "autoload-dev": {
         "psr-4": {

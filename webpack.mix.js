@@ -12,11 +12,23 @@ require("laravel-mix-tailwind");
  | file for the application as well as bundling up all the JS files.
  |
  */
-
-mix.js("resources/js/app.js", "public/js/app.js")
+mix.webpackConfig({ stats: { children: true, }, });
+mix.js(["resources/js/app.js",
+        "resources/js/components/chat-list.js",
+       "resources/js/components/chat.js",
+       "resources/js/components/index.js",
+       "resources/js/components/preference-form.js",
+       "resources/js/components/start-form.js",
+       "resources/js/components/swipe-card.js"
+       ],
+       "public/js/app.js")
     .sass("resources/sass/app.scss", "public/css/app.css")
+    .styles(['resources/css/app.css',
+             'resources/css/style.css'],
+             'public/css/style.css')
     .tailwind("./tailwind.config.js")
     .sourceMaps();
+
 
 if (mix.inProduction()) {
     mix.version();
